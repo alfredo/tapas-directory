@@ -13,23 +13,45 @@ logger.setLevel('DEBUG');
 * Setup deps
 *****************************************************/
 
-var User = require('../../modules/tapas-models').User;
-var Client = require('../../modules/tapas-models').Client;
+//var User = require('../../modules/tapas-models').User;
+var User = require('models/user');
+
+var Client = require('models/client');
 var controller = {};
 var tapas = module.parent.exports.tapas;
 var crypto = require('crypto');
+var forms = require('forms');
+var sys = require('sys');
+var utils = require('tapas/utils');
+
 
 /****************************************************
 * controller handlers
 *****************************************************/
+var options = {};
+options.layout = false;
 
 controller.index = function(req, res){
-	req.params.format = 'html';
-	controller.list(req, res);	
+        req.params.format = 'html';
+	controller.list(req, res);
+};
+
+controller.user_list = function(req, res){
+    var query = {};
+    User.find(query).all(
+        function(users){
+            return res.send(utils.render_as_json(users));
+        });
+};
+
+controller.user_add = function(req, res){
+    res.render('user_add.ejs',
+               {locals:{ "form": forms.user }
+	       });
 };
 
 controller.list = function(req, res){
-	var query = {};
+    var query = {};
 	if (req.query.company)
 		query["company"] = new RegExp(req.query.company, 'i');
 	if (req.query.first)

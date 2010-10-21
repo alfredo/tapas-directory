@@ -1,4 +1,7 @@
-
+// setup imports
+require.paths.unshift(__dirname + "/../lib/node");
+require.paths.unshift(__dirname + "/../modules");
+require.paths.unshift(__dirname);
 /****************************************************
 * node dependencies
 *****************************************************/
@@ -17,7 +20,7 @@ fs.mkdir('log', 0700);
 var log4js = require('log4js');
 // create logging appenders
 log4js.addAppender(log4js.fileAppender('log/app.log'), 'app');
-// get specified log and set minimum logging level  
+// get specified log and set minimum logging level
 var logger = log4js.getLogger('app');
 logger.setLevel('DEBUG');
 
@@ -46,6 +49,14 @@ var app = express.createServer(
 );
 app.use(express.staticProvider(__dirname + '/../public'));
 app.set('views', __dirname + '/../views');
+
+// var Mu = require('mu');
+// app.register('.html',
+//              {render: function(str, options){
+//                   sys.print("SSS");
+//                   return Mu.render(str, options);
+//               }
+//              });
 app.set('view engine', 'ejs');
 // Here we use the bodyDecoder middleware
 // to parse urlencoded request bodies
@@ -65,12 +76,22 @@ tapas.server = app;
 *****************************************************/
 
 // Get the users
+
+app.get('/users/all', function(req, res){
+	    tapas.directory.controllers.user.user_list(req, res);
+});
+
+app.get('/users/add', function(req, res){
+	    tapas.directory.controllers.user.user_add(req, res);
+});
+
+
 app.get('/', function(req, res){
 	res.redirect('/users');
 });
 app.get('/users/create', function(req, res){
 	logger.debug('protecting GET /users/create');
-	req.authenticate(['basic'], function(error, authenticated) { 
+	req.authenticate(['basic'], function(error, authenticated) {
 		tapas.directory.controllers.user.createform(req, res);
 	});
 });
@@ -83,7 +104,7 @@ app.post('/users', function(req, res){
 app.post('/users/:username', function(req, res){
 	logger.debug('protecting POST /users/username');
 	req.authenticate(['basic'], function(error, authenticated){
-		tapas.directory.controllers.user.update(req, res);		
+		tapas.directory.controllers.user.update(req, res);
 	});
 });
 app.get('/users/:username/edit', function(req, res) {

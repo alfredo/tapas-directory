@@ -1,0 +1,10 @@
+<header>
+  <h1>Add user</h1>
+  <h2>administration view</h2>
+</header>
+
+<form method="post" id="user_add_id" action=".">
+  <% for(field in form) {%>
+   <li><label for="<%= form[field].auto_id %>"><%= form[field].label %></label><%- form[field].render() %></li>
+   <% } %>
+</form>
