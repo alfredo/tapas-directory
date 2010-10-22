@@ -13,9 +13,14 @@ var modelform = function(Model, form_definition){
         // hide private fields
         if(!field.match("^_")){
             if(field in form_definition){
-                form[field] = new form_definition[field].field(field);
+                var widget = form_definition[field].widget;
+                var label = form_definition[field].label;
+                // sys.print(widget);
+                form[field] = new form_definition[field].field(field,
+                                                               label,
+                                                               widget);
             }else{
-                form[field] = new fields.CharField(field);
+                form[field] = new fields.CharField(field, field);
             }
         }
     }

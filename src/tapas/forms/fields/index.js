@@ -5,16 +5,16 @@ var Class = require('tapas/utils/util').Class;
 // base class for the fields
 var Field = Class(
     {
-        init: function(name, label){
+        init: function(name, label, widget){
             this.name = name;
             this.label = label;
             this.auto_id =  'id_' + this.name;
+            this.widget = widget;
+            this.value = null;
             if(!this.label){
                 this.label = this.name;
             }
-            this.value = null;
-            this.widget = new widgets.TextWidget(this.name,
-                                                 this.label);
+            this.widget = new widget(this.name, this.label);
         },
         // renders widget
         render: function(){
@@ -44,22 +44,20 @@ var Field = Class(
 
 var CharField = Field.extend(
     {
-        init: function(name, label){
-            this.__super__(name, label);
-            this.widget = new widgets.TextWidget(this.name,
-                                                 this.label);
+        init: function(name, label, widget){
+            var field_widget = typeof(widget) != 'undefined' ? widget : widgets.TextWidget;
             this._field = 'CharField';
+            this.__super__(name, label, field_widget);
         }
     }
 );
 
 var TextField = Field.extend(
     {
-        init: function(name, label){
-            this.__super__(name, label);
-            this.widget = new widgets.TextAreaWidget(this.name,
-                                                    this.label);
+        init: function(name, label, widget){
+            var field_widget = typeof(widget) != 'undefined' ? widget : widgets.TextAreaWidget;
             this._field = 'TextField';
+            this.__super__(name, label, field_widget);
         }
     }
 );

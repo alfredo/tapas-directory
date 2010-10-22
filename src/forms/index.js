@@ -7,7 +7,8 @@ var forms = {};
 forms.User = function(){
     var user_options = {
         username: {
-            field: fields.CharField
+            field: fields.CharField,
+            widget: widgets.TextAreaWidget
         },
         address: {
             field: fields.TextField
