@@ -1,29 +1,45 @@
+/*
+ * Widgets for the form
+ * */
+var Class = require('tapas/utils/util').Class;
+var Widget = Class(
+    {
+        init: function(name, label){
+            this.name = name;
+            this.label = label;
+            this.auto_id =  'id_' + this.name;
+            if(!this.label){
+                this.label = this.name;
+            }
+        },
+        render: function(){}
+    });
 
-
-// simple wrapper to return a render method
-function render_generator(text){
-    var render ={
+var TextWidget = this.TextWidget = Widget.extend(
+    {
         render: function(){
+            var text = '<input type="text" id="'+
+                this.auto_id +
+                '" name="'+
+                this.name +'">';
             return text;
         }
-    };
-    return render;
-}
-
-var widgets = {
-    text: function(name){
-        var text = '<input type="text" id="id_'+ name +'" name="'+ name +'">';
-        var widget = render_generator(text);
-        widget.auto_id = "id_" + name;
-        widget.label = name;
-        return widget;
-    },
-    textarea: function(name){
-        var text = '<textarea id="id_'+ name +'" name="'+ name +'"></textarea>';
-        var widget = render_generator(text);
-        widget.auto_id = "id_" + name;
-        widget.label = name;
-        return widget;
     }
-};
+);
+
+var TextAreaWidget = this.TextAreaWidget = Widget.extend(
+    {
+        render: function(){
+            var text = '<textarea id="'+
+                this.auto_id +
+                '" name="'+
+                this.name +'"></textarea>';
+            return text;
+        }
+    }
+);
+
+var widgets = {};
+widgets.TextWidget = TextWidget;
+widgets.TextAreaWidget = TextAreaWidget;
 module.exports = widgets;

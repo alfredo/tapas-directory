@@ -3,20 +3,20 @@
 ***********************/
 var sys = require('sys');
 var template = require('tapas/template');
-var widgets = require('tapas/forms/widgets');
-var modelform = function(Model){
-    // iterate fields and generate widgets
-    // fields widgets should have a render method
+var fields = require('tapas/forms/fields');
+// generate a form from the model
+var modelform = function(Model, form_definition){
     var form = {};
-    var reserved_fields = ['_id'];
-    // TODO: find a better way to introspect
+    // TODO: find a better way to introspect mongoose models
     var modelinstance = new Model();
-    //console.dir(modelinstance._partials);
-    // generate widgets
-    console.dir(modelinstance);
     for(field in modelinstance._partials){
+        // hide private fields
         if(!field.match("^_")){
-            form[field] = widgets.text(field);
+            if(field in form_definition){
+                form[field] = new form_definition[field].field(field);
+            }else{
+                form[field] = new fields.CharField(field);
+            }
         }
     }
     return form;

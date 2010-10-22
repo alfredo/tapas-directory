@@ -45,8 +45,9 @@ controller.user_list = function(req, res){
 };
 
 controller.user_add = function(req, res){
+    //console.dir(forms.User());
     res.render('user_add.ejs',
-               {locals:{ "form": forms.user }
+               {locals:{ "form": forms.User() }
 	       });
 };
 
